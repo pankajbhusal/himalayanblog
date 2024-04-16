@@ -1,0 +1,139 @@
+<!-- Views/viewAllPosts.ejs -->
+<%- include('./partials/navbar', { req: req }) %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Posts</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom Styles */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f3f4f6;
+        color: #1a202c;
+       
+        padding-left: 10%;
+        padding-right: 10%;
+       
+      }
+      
+      .container {
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .post-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        display: flex; /* Aligns items in each post card */
+        flex-direction: column; /* Arranges content in a column */
+        height: 400px; /* Ensures the card takes full height */
+      }
+      .post-card:hover {
+        transform: translateY(-5px);
+      }
+      .post-card > * {
+        /* Applies left alignment to all direct children of post card */
+        margin-left: 0; /* Reset default margin */
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <div class="contentBody">
+    <main class="container px-4 py-8 w-full">
+      <h1 class="text-4xl font-bold text-left text-gray-800 mb-10">
+        All Posts
+      </h1>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <% posts.forEach(post => { %>
+        <div class="post-card overflow-hidden rounded-lg shadow-md">
+          <a href="/postdetails/<%= post._id %>">
+            <img
+              src="<%= post.image %>"
+              alt="<%= post.title %> image"
+              class="w-full h-48 object-cover object-center"
+            />
+          </a>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              <%= post.title %>
+            </h3>
+            <p class="text-gray-700 leading-relaxed text-justify">
+              <%= post.intro.slice(0, 200) %>...
+            </p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    </main>
+      <!-- Footer Section -->
+      <footer class="text-center text-gray-600 mt-8 py-4 bg-gray-800 text-white">
+        <div class="container mx-auto px-6">
+          <!-- Brand and Copyright -->
+          <p>&copy; 2024 The Himalayan Times. All rights reserved.</p>
+          
+          <!-- Social Media Links -->
+          <div class="mt-4">
+            <h3 class="text-lg font-semibold">Follow Us:</h3>
+            <ul class="flex justify-center gap-4 mt-2">
+              <li><a href="#" class="hover:text-gray-300">Facebook</a></li>
+              <li><a href="#" class="hover:text-gray-300">Twitter</a></li>
+              <li><a href="#" class="hover:text-gray-300">Instagram</a></li>
+              <li><a href="#" class="hover:text-gray-300">LinkedIn</a></li>
+            </ul>
+          </div>
+          
+          <!-- Newsletter Subscription -->
+          <div class="mt-8" id="newsletterSubscription">
+            <h3 class="text-lg font-semibold">Subscribe to our newsletter</h3>
+            <form id="subscribeForm">
+              <input type="email" name="email" placeholder="Enter your email" required class="p-2 text-black">
+              <button type="submit" class="p-2 bg-blue-500 text-white hover:bg-blue-600">Subscribe</button>
+            </form>
+            <p id="subscriptionMessage" style="display:none; margin-top: 10px;">Subscribed Sucessfully!</p>
+          </div>
+
+          <script>
+            document.getElementById('subscribeForm').addEventListener('submit', function(event) {
+              event.preventDefault(); // Prevent the form from submitting normally
+              var emailInput = document.querySelector('#subscribeForm input[name="email"]');
+              if (emailInput.value) { // Check if the email is not empty
+                // Here, you could also add AJAX to handle emailing or database interaction.
+                document.getElementById('subscriptionMessage').style.display = 'block'; // Show the subscribed message
+                emailInput.value = ''; // Optionally clear the input field
+              } else {
+                alert('Please enter an email address.');
+              }
+            });
+          </script>
+
+          
+          <!-- Quick Links -->
+          <div class="mt-8">
+            <h3 class="text-lg font-semibold">Quick Links</h3>
+            <ul class="flex justify-center gap-4">
+              <li><a href="viewHomePage" class="hover:text-gray-300">Home</a></li>
+              <li><a href="viewAll" class="hover:text-gray-300">View All Post</a></li>
+              <li><a href="viewAboutus" class="hover:text-gray-300">About Us</a></li>
+              <li><a href="viewLoginPage" class="hover:text-gray-300">Login</a></li>
+            </ul>
+          </div>
+          
+          <!-- Contact Information -->
+          <div class="mt-8">
+            <h3 class="text-lg font-semibold">Contact Us</h3>
+            <p>Email: info@himalayantimes.com</p>
+            <p>Phone: +123 456 7890</p>
+          </div>
+        </div>
+      </footer>
+  </body>
+</html>

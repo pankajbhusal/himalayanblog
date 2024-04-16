@@ -1,0 +1,145 @@
+<%- include('./partials/navbar') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom Styles */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f3f4f6;
+        color: #1a202c;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #2b6cb0; /* Blue */
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+      .btn:hover {
+        background-color: #2c5282; /* Darker Blue */
+      }
+      .post-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+      .post-card:hover {
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+      <h1 class="text-3xl font-semibold text-gray-800 mb-6">
+        Welcome to the Admin Dashboard
+      </h1>
+
+      <div class="flex justify-between">
+        <!-- Create New User Button -->
+        <a href="/admin/users/new" class="btn mb-4"> Create New User </a>
+
+        <!-- User Search Bar -->
+        <form action="/admin/users/search" method="GET" class="mb-4 flex">
+          <input
+            type="text"
+            name="query"
+            placeholder="Search by username or email..."
+            class="w-60 px-3"
+          />
+          <button type="submit" class="btn ml-2">Search</button>
+        </form>
+      </div>
+      <!-- User List -->
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Users</h2>
+      <div class="overflow-y-auto max-h-80">
+        <!-- Add a max-height and make it scrollable -->
+        <ul>
+          <% users.forEach(user => { %>
+          <li class="post-card p-4 my-5">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              <%= user.username %>
+            </h3>
+            <p class="text-gray-700">
+              <strong>Email:</strong> <%= user.email %>
+            </p>
+            <div class="mt-2 flex">
+              <a
+                href="/admin/users/edit/<%= user._id %>"
+                class="text-blue-500 hover:underline mr-2"
+                >Edit</a
+              >
+              <a
+                href="/admin/users/delete/<%= user._id %>"
+                class="text-red-500 hover:underline"
+                >Delete</a
+              >
+            </div>
+          </li>
+          <% }); %>
+        </ul>
+      </div>
+
+      <!-- Post List -->
+      <h2 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Posts</h2>
+      <!-- <div>
+        <% posts.forEach(post => { %>
+        <div class="post-card p-4 my-5">
+          <a href="/admin/postdetails/<%= post._id %>">
+            <% if (post.image) { %>
+            <img
+              src="<%= post.image %>"
+              alt="<%= post.title %> image"
+              class="w-full h-48 object-cover object-center mb-4"
+            />
+            <% } %>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              <%= post.title %>
+            </h3>
+            <p class="text-gray-700"></p>
+          </a>
+        </div>
+        <% }); %>
+      </div> -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8">
+        <% posts.forEach(post => { %>
+        <div class="post-card overflow-hidden rounded-lg shadow-md">
+          <a href="/admin/postdetails/<%= post._id %>">
+            <img
+              src="<%= post.image %>"
+              alt="<%= post.title %> image"
+              class="w-full h-48 object-cover object-center"
+            />
+          </a>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              <%= post.title %>
+            </h3>
+            <p class="text-gray-700 leading-relaxed text-justify">
+              <%= post.intro.slice(0, 200) %>...
+            </p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </body>
+</html>

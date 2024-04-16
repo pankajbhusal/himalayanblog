@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Blog</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom Styles */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .topic {
+    background-image: url('https://wallpaperaccess.com/full/93182.jpg'); /* URL of the Himalayan image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-top: 50px;
+    max-width: 75%;
+    padding-bottom: 100px;
+    margin-left: 200px;
+    color: rgba(5, 1, 11, 0.858); /* Adjust the text color to ensure readability against the background */
+}
+
+
+      /* Responsive Navigation Styles */
+      @media (max-width: 768px) {
+        .nav-links {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+        .nav-links li {
+          margin-left: 0 !important;
+        }
+       
+
+      }
+    </style>
+  </head>
+  <body>
+    <header class="text-black">
+      <div class = "topic">
+      <h1 class="text-center w-full font-bold text-6xl my-10">The Himalayan Times</h1>
+    </div>
+      <nav class="container mx-auto px-6 py-4">
+        <ul class="flex justify-between items-center">
+          <li>
+            <a href="/" class="hover:text-gray-400 font-semibold text-xl"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              href="/view-all-posts"
+              class="ml-4 hover:text-gray-400 font-semibold text-xl"
+              >View All Posts</a
+            >
+          </li>
+
+          <li>
+            <a href="/viewAboutus" class="hover:text-gray-400 font-semibold text-xl"
+              >About us</a
+            >
+          </li>
+          
+          <% if (!req.session.userId) { %>
+          <li>
+            <a
+              href="/viewLoginPage"
+              class="hover:text-gray-400 font-semibold text-xl"
+              >Login</a
+            >
+          </li>
+          <% } else { %> <% if (req.session.role === 'admin') { %>
+          <li>
+            <a
+              href="/admindashboard"
+              class="hover:text-gray-400 font-semibold text-xl"
+              >Admin Dashboard</a
+            >
+          </li>
+          <% } %> <% if (req.session.role === 'user') { %>
+          <li>
+            <a
+              href="/posts/new"
+              class="hover:text-gray-400 font-semibold text-xl"
+              >Create Post</a
+            >
+          </li>
+          <% } %>
+          <li>
+            <a href="/logout" class="hover:text-gray-400 font-semibold text-xl"
+              >Logout</a
+            >
+          </li>
+          <% } %>
+        </ul>
+      </nav>
+    </header>
+  </body>
+</html>

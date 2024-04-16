@@ -1,0 +1,117 @@
+<%- include('./partials/navbar', { req: req }) %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Head content -->
+  </head>
+  <body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+      <div class="post-card bg-white rounded-xl shadow-lg p-5">
+        <div class="flex justify-between">
+          <h1 class="text-2xl font-bold text-gray-800 mb-4">
+            <%= post.title %>
+          </h1>
+          <!-- Links for admin to edit/delete and user to go back -->
+          <div class="my-4">
+            <% if (req.session.role === 'admin') { %>
+            <a
+              href="/admin/posts/edit/<%= post._id %>"
+              class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded mr-2"
+              >Edit</a
+            >
+            <a
+              href="/admin/posts/delete/<%= post._id %>"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >Delete</a
+            >
+            <% } %>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-4">
+          <strong>Published on</strong> <%= post.publishDate.toDateString() %>
+        </p>
+        <% if (post.image) { %>
+        <img
+          src="<%= post.image %>"
+          alt="<%= post.title %> image"
+          class="w-2/3 h-auto object-contain mb-4"
+        />
+        <% } %>
+        <p class="text-xl my-2 mb-3"><strong>Introduction</strong></p>
+        <p class="text-gray-700 mb-4 text-justify"><%= post.intro %></p>
+        <p class="text-xl my-2 mb-3"><strong>Content</strong></p>
+        <p class="text-gray-700 mb-4 text-justify"><%= post.content %></p>
+        <p class="text-gray-700 mb-4">
+          <strong>Author:</strong> <%= post.author %>
+        </p>
+
+        <% if (post.link) { %>
+        <p class="text-blue-600 mb-4">
+          <a href="<%= post.link %>" target="_blank" rel="noopener noreferrer"
+            >Click Here to Follow Reference</a
+          >
+        </p>
+        <% } %>
+      </div>
+
+      <div class="mt-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Comments</h2>
+        <% if (post.comments && post.comments.length > 0) { %> <%
+        post.comments.forEach(comment => { %>
+        <div class="comment-card flex my-5">
+          <p class="comment-author mr-3">
+            <strong><%= comment.author %>:</strong>
+          </p>
+          <p class="text-gray-800"><%= comment.content %></p>
+        </div>
+        <% }); %> <% } else { %>
+        <p class="text-gray-800">No comments yet.</p>
+        <% } %>
+      </div>
+
+      <% if (req.session.userId) { %>
+      <div class="mt-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Add a Comment</h2>
+        <form
+          action="/posts/<%= post._id %>/comments"
+          method="POST"
+          class="mb-4"
+        >
+          <div class="mb-4">
+            <label for="author" class="block text-sm font-medium text-gray-700"
+              >Your Name</label
+            >
+            <input
+              type="text"
+              id="author"
+              name="author"
+              required
+              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-600 rounded-md px-4 border-1"
+              value="<%= username || '' %>"
+              readonly
+            />
+          </div>
+          <div class="mb-4">
+            <label for="content" class="block text-sm font-medium text-gray-700"
+              >Comment</label
+            >
+            <textarea
+              id="content"
+              name="content"
+              required
+              rows="4"
+              class="shadow-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-600 rounded-md p-4 border-1"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+          >
+            Submit Comment
+          </button>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>
